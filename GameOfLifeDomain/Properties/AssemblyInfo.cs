@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NinjectBootstrap")]
+[assembly: AssemblyTitle("GameOfLifeDomain")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NinjectBootstrap")]
+[assembly: AssemblyProduct("GameOfLifeDomain")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a1702a31-6ab8-41f8-870a-7c2a40caa47e")]
+[assembly: Guid("7652180c-c33c-4b3b-9b9f-d4056cf0ef5c")]
 
 // Version information for an assembly consists of the following four values:
 //

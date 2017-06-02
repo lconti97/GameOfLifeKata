@@ -6,6 +6,7 @@ namespace GameOfLifeKata.Services
     {
         public Int32 GetAliveNeighborsCount(Int32[,] cells, Int32 row, Int32 column)
         {
+
             return 0;
         }
     }

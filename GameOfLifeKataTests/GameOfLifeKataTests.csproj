@@ -77,6 +77,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GameOfLifeDomain\GameOfLifeDomain.csproj">
+      <Project>{7652180c-c33c-4b3b-9b9f-d4056cf0ef5c}</Project>
+      <Name>GameOfLifeDomain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GameOfLifeKata\GameOfLifeKata.csproj">
       <Project>{54c4ddaa-cddb-40c3-821a-31d35724dd12}</Project>
       <Name>GameOfLifeKata</Name>
