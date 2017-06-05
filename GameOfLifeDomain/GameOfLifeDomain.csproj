@@ -40,11 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\LifeState.cs" />
+    <Compile Include="Models\LifeStates\AliveLifeState.cs" />
+    <Compile Include="Models\LifeStates\DeadLifeState.cs" />
+    <Compile Include="Models\LifeStates\ILifeState.cs" />
     <Compile Include="GameOfLife.cs" />
     <Compile Include="IGameOfLife.cs" />
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Models\Generation.cs" />
+    <Compile Include="Models\LifeStates\NeverAliveLifeState.cs" />
     <Compile Include="Services\CellNeighborService.cs" />
     <Compile Include="Services\ICellNeighborService.cs" />
     <Compile Include="Validators\GenerationValidator.cs" />

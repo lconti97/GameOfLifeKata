@@ -1,4 +1,4 @@
-﻿using GameOfLifeDomain.Models;
+﻿using GameOfLifeDomain.Models.LifeStates;
 using GameOfLifeKata.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -10,7 +10,7 @@ namespace GameOfLifeKataTests.Models
         [TestMethod]
         public void CellCreatedAliveIsAliveReturnsTrue()
         {
-            var cell = new Cell(LifeState.Alive);
+            var cell = new Cell(new AliveLifeState());
 
             Assert.IsTrue(cell.IsAlive());
         }
@@ -18,7 +18,7 @@ namespace GameOfLifeKataTests.Models
         [TestMethod]
         public void CellCreatedNotAliveIsAliveReturnsFalse()
         {
-            var cell = new Cell(LifeState.NeverAlive);
+            var cell = new Cell(new NeverAliveLifeState());
 
             Assert.IsFalse(cell.IsAlive());
         }

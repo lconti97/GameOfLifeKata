@@ -1,34 +1,20 @@
-﻿using GameOfLifeDomain.Models;
+﻿using GameOfLifeDomain.Models.LifeStates;
 using System;
 
 namespace GameOfLifeKata.Models
 {
     public class Cell
     {
-        public LifeState State { get; set; }
-        public Int32 GenerationsSinceAlive { get; set; }
+        public ILifeState LifeState { get; set; }
 
-        public Cell(LifeState state)
+        public Cell(ILifeState state)
         {
-            State = state;
-
-            if (state == LifeState.Alive)
-                GenerationsSinceAlive = 0;
-            else if (state == LifeState.Dead)
-                GenerationsSinceAlive = 1;
-            else if (state == LifeState.NeverAlive)
-                GenerationsSinceAlive = -1;
-        }
-
-        public Cell(LifeState state, Int32 generationsSinceAlive)
-        {
-            State = state;
-            GenerationsSinceAlive = generationsSinceAlive;
+            LifeState = state;
         }
 
         public Boolean IsAlive()
         {
-            return State == LifeState.Alive;
+            return LifeState is AliveLifeState;
         }
     }
 }

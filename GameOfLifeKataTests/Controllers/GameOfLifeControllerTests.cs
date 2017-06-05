@@ -22,7 +22,7 @@ namespace GameOfLifeKataTests.Controllers
             mockGameOfLife = new Mock<IGameOfLife>();
             mockGenerationValidator = new Mock<IGenerationValidator>();
             controller = new GameOfLifeController(mockGameOfLife.Object, mockGenerationValidator.Object);
-            currentGeneration = new Generation();
+            currentGeneration = new Generation(50, 50);
         }
 
         [TestMethod]

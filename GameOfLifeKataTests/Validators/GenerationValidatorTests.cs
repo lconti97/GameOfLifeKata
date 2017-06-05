@@ -14,7 +14,7 @@ namespace GameOfLifeKataTests.Validators
         public GenerationValidatorTests()
         {
             validator = new GenerationValidator();
-            generation = new Generation();
+            generation = new Generation(50, 50);
         }
 
         [TestMethod]

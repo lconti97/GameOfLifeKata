@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\GameOfLifeControllerTests.cs" />
+    <Compile Include="Factories\CellGridFactory.cs" />
     <Compile Include="GameOfLifeTests.cs" />
     <Compile Include="Models\CellTests.cs" />
     <Compile Include="Services\CellNeighborServiceTests.cs" />

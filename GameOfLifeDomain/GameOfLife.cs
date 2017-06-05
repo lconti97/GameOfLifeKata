@@ -1,4 +1,5 @@
 ﻿using GameOfLifeDomain.Models;
+using GameOfLifeDomain.Models.LifeStates;
 using GameOfLifeKata.Models;
 using GameOfLifeKata.Services;
 using System;
@@ -16,16 +17,18 @@ namespace GameOfLifeKata.Domain
 
         public Generation GetNextGeneration(Generation currentGeneration)
         {
-            var nextGenerationCells = new Cell[Generation.Rows, Generation.Columns];
-            for (var row = 0; row < Generation.Rows; row++)
+            Int32 rows = currentGeneration.Cells.GetLength(0);
+            Int32 columns = currentGeneration.Cells.GetLength(1);
+
+            var nextGenerationCells = new Cell[rows, columns];
+            for (var row = 0; row < rows; row++)
             {
-                for (var column = 0; column < Generation.Columns; column++)
+                for (var column = 0; column < columns; column++)
                 {
+                    var cell = currentGeneration.Cells[row, column];
+
                     var aliveNeighborsCount = cellNeighborService.GetAliveNeighborsCount(currentGeneration.Cells, row, column);
-                    if (aliveNeighborsCount == 3 || (currentGeneration.Cells[row, column].IsAlive() && aliveNeighborsCount == 2))
-                        UpdateCell(currentGeneration.Cells[row, column], true);
-                    else
-                        UpdateCell(currentGeneration.Cells[row, column], false);
+                    UpdateCell(cell, CellWillBeAlive(cell, aliveNeighborsCount));
 
                     nextGenerationCells[row, column] = currentGeneration.Cells[row, column];
                 }
@@ -34,22 +37,58 @@ namespace GameOfLifeKata.Domain
             return new Generation(nextGenerationCells);
         }
 
-        private void UpdateCell(Cell cell, Boolean survivedGeneration)
+        private Boolean CellWillBeAlive(Cell cell, Int32 aliveNeighborsCount)
         {
-            if (survivedGeneration)
+            var cellIsAliveAndSurvives = cell.IsAlive() && (aliveNeighborsCount == 2 || aliveNeighborsCount == 3);
+            var cellIsNotAliveAndWillBePopulated = !cell.IsAlive() && aliveNeighborsCount == 3;
+
+            return cellIsAliveAndSurvives || cellIsNotAliveAndWillBePopulated;
+        }
+
+        private void UpdateCell(Cell cell, Boolean willBeAlive)
+        {
+            if (cell.LifeState is NeverAliveLifeState && willBeAlive) {
+                cell.LifeState = new AliveLifeState();
+            }
+            else if (cell.LifeState is AliveLifeState && !willBeAlive) {
+                cell.LifeState = new DeadLifeState();
+            }
+            else if (cell.LifeState is DeadLifeState) {
+                if (willBeAlive)
+                    cell.LifeState = new AliveLifeState();
+                else 
+                    cell.LifeState.GenerationsSinceAlive++;
+            }
+            /*
+            if (cell.State == LifeState.NeverAlive)
             {
-                cell.State = LifeState.Alive;
-                cell.GenerationsSinceAlive = 0;
+                if (willBeAlive)
+                {
+                    cell.State = LifeState.Alive;
+                    cell.GenerationsSinceAlive = 0;
+                }
             }
             else if (cell.State == LifeState.Alive)
             {
-                cell.State = LifeState.Dead;
-                cell.GenerationsSinceAlive = 1;
+                if (!willBeAlive)
+                {
+                    cell.State = LifeState.Dead;
+                    cell.GenerationsSinceAlive = 1;
+                }
             }
             else if (cell.State == LifeState.Dead)
             {
-                cell.GenerationsSinceAlive++;
+                if (willBeAlive)
+                {
+                    cell.State = LifeState.Alive;
+                    cell.GenerationsSinceAlive = 0;
+                }
+                else
+                {
+                    cell.GenerationsSinceAlive++;
+                }
             }
+            */
         }
     }
 }
