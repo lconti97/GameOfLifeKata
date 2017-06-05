@@ -6,11 +6,16 @@ namespace GameOfLifeKata.Models
     {
         public const Int32 Rows = 50;
         public const Int32 Columns = 50;
-        public Int32[,] Cells { get; set; }
+        public Cell[,] Cells { get; set; }
 
         public Generation()
         {
-            Cells = new Int32[Rows, Columns];
+            Cells = new Cell[Rows, Columns];
+        }
+
+        public Generation(Cell[,] cells)
+        {
+            Cells = cells;
         }
     }
 }
