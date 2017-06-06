@@ -1,5 +1,5 @@
-﻿using GameOfLifeDomain.Models.LifeStates;
-using GameOfLifeKata.Models;
+﻿using GameOfLifeDomain.Models;
+using GameOfLifeDomain.Models.LifeStates;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GameOfLifeKataTests.Models
@@ -22,5 +22,7 @@ namespace GameOfLifeKataTests.Models
 
             Assert.IsFalse(cell.IsAlive());
         }
+
+
     }
 }

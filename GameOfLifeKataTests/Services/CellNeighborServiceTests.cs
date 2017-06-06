@@ -1,4 +1,4 @@
-﻿using GameOfLifeKata.Services;
+﻿using GameOfLifeDomain.Services;
 using GameOfLifeKataTests.Factories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static GameOfLifeKataTests.Factories.CellGridFactory;

@@ -1,7 +1,7 @@
-﻿using GameOfLifeKata.Models;
+﻿using GameOfLifeDomain.Models;
 using System;
 
-namespace GameOfLifeKata.Services
+namespace GameOfLifeDomain.Services
 {
     public interface ICellNeighborService
     {

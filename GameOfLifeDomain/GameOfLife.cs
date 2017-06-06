@@ -1,13 +1,13 @@
 ﻿using GameOfLifeDomain.Models;
 using GameOfLifeDomain.Models.LifeStates;
-using GameOfLifeKata.Models;
-using GameOfLifeKata.Services;
+using GameOfLifeDomain.Services;
 using System;
 
-namespace GameOfLifeKata.Domain
+namespace GameOfLifeDomain
 {
     public class GameOfLife : IGameOfLife
     {
+        public static Generation currentGeneration = new Generation(50, 50);
         private ICellNeighborService cellNeighborService;
 
         public GameOfLife(ICellNeighborService cellNeighborService)
@@ -59,36 +59,6 @@ namespace GameOfLifeKata.Domain
                 else 
                     cell.LifeState.GenerationsSinceAlive++;
             }
-            /*
-            if (cell.State == LifeState.NeverAlive)
-            {
-                if (willBeAlive)
-                {
-                    cell.State = LifeState.Alive;
-                    cell.GenerationsSinceAlive = 0;
-                }
-            }
-            else if (cell.State == LifeState.Alive)
-            {
-                if (!willBeAlive)
-                {
-                    cell.State = LifeState.Dead;
-                    cell.GenerationsSinceAlive = 1;
-                }
-            }
-            else if (cell.State == LifeState.Dead)
-            {
-                if (willBeAlive)
-                {
-                    cell.State = LifeState.Alive;
-                    cell.GenerationsSinceAlive = 0;
-                }
-                else
-                {
-                    cell.GenerationsSinceAlive++;
-                }
-            }
-            */
         }
     }
 }

@@ -72,8 +72,13 @@
     <Compile Include="Factories\CellGridFactory.cs" />
     <Compile Include="GameOfLifeTests.cs" />
     <Compile Include="Models\CellTests.cs" />
+    <Compile Include="Services\GenerationConverterServiceTests.cs" />
+    <Compile Include="Models\GenerationTests.cs" />
+    <Compile Include="Models\LifeStateTests\AliveLifeStateTests.cs" />
+    <Compile Include="Models\LifeStateTests\DeadLifeState.cs" />
+    <Compile Include="Services\LifeStateGeneratorServiceTests.cs" />
+    <Compile Include="Models\LifeStateTests\NeverAliveLifeState.cs" />
     <Compile Include="Services\CellNeighborServiceTests.cs" />
-    <Compile Include="Validators\GenerationValidatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

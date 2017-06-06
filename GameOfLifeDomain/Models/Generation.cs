@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GameOfLifeKata.Models
+namespace GameOfLifeDomain.Models
 {
     public class Generation
     {

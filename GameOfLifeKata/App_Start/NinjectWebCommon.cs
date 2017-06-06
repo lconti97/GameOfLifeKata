@@ -3,9 +3,8 @@
 
 namespace NinjectBootstrap.App_Start
 {
-    using GameOfLifeKata.Domain;
-    using GameOfLifeKata.Services;
-    using GameOfLifeKata.Validators;
+    using GameOfLifeDomain;
+    using GameOfLifeDomain.Services;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
     using Ninject;
     using Ninject.Web.Common;
@@ -49,8 +48,8 @@ namespace NinjectBootstrap.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IGameOfLife>().To<GameOfLife>();
-            kernel.Bind<IGenerationValidator>().To<GenerationValidator>();
             kernel.Bind<ICellNeighborService>().To<CellNeighborService>();
+            kernel.Bind<IGenerationConverterService>().To<GenerationConverterService>();
         }        
     }
 }

@@ -1,7 +1,7 @@
 ﻿using GameOfLifeDomain.Models.LifeStates;
 using System;
 
-namespace GameOfLifeKata.Models
+namespace GameOfLifeDomain.Models
 {
     public class Cell
     {

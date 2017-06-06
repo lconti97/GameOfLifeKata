@@ -1,9 +1,9 @@
-﻿using GameOfLifeKata.Models;
+﻿using GameOfLifeDomain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GameOfLifeKata.Services
+namespace GameOfLifeDomain.Services
 {
     public class CellNeighborService : ICellNeighborService
     {

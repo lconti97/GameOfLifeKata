@@ -1,7 +1,7 @@
-﻿using GameOfLifeDomain.Models.LifeStates;
-using GameOfLifeKata.Domain;
-using GameOfLifeKata.Models;
-using GameOfLifeKata.Services;
+﻿using GameOfLifeDomain;
+using GameOfLifeDomain.Models;
+using GameOfLifeDomain.Models.LifeStates;
+using GameOfLifeDomain.Services;
 using GameOfLifeKataTests.Factories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

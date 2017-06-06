@@ -1,6 +1,6 @@
-﻿using GameOfLifeKata.Models;
+﻿using GameOfLifeDomain.Models;
 
-namespace GameOfLifeKata.Domain
+namespace GameOfLifeDomain
 {
     public interface IGameOfLife
     {

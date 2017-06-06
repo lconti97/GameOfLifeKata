@@ -1,5 +1,5 @@
-﻿using GameOfLifeDomain.Models.LifeStates;
-using GameOfLifeKata.Models;
+﻿using GameOfLifeDomain.Models;
+using GameOfLifeDomain.Models.LifeStates;
 using System;
 
 namespace GameOfLifeKataTests.Factories
