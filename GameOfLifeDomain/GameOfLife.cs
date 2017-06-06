@@ -57,7 +57,7 @@ namespace GameOfLifeDomain
                 if (willBeAlive)
                     cell.LifeState = new AliveLifeState();
                 else 
-                    cell.LifeState.GenerationsSinceAlive++;
+                    (cell.LifeState as DeadLifeState).GenerationsSinceAlive++;
             }
         }
     }

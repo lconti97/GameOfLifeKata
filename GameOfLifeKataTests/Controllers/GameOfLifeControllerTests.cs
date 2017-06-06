@@ -8,7 +8,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Web.Http.Results;
-using static GameOfLifeKataTests.Factories.CellGridFactory;
 
 namespace GameOfLifeKataTests.Controllers
 {
@@ -16,53 +15,73 @@ namespace GameOfLifeKataTests.Controllers
     public class GameOfLifeControllerTests
     {
         private Mock<IGameOfLife> mockGameOfLife;
-        private Mock<IGenerationConverterService> mockGenerationConverterService;
+        private Mock<IGenerationEncoderService> mockGenerationEncoderService;
         private GameOfLifeController controller;
-        private Generation currentGeneration;
         private CellGridFactory cellGridFactory;
-        private LifeStateGeneratorService lifeStateGeneratorService;
 
         public GameOfLifeControllerTests()
         {
             mockGameOfLife = new Mock<IGameOfLife>();
-            mockGenerationConverterService = new Mock<IGenerationConverterService>();
-            controller = new GameOfLifeController(mockGameOfLife.Object, mockGenerationConverterService.Object);
-            currentGeneration = new Generation(50, 50);
+            mockGenerationEncoderService = new Mock<IGenerationEncoderService>();
+            controller = new GameOfLifeController(mockGameOfLife.Object, mockGenerationEncoderService.Object);
             cellGridFactory = new CellGridFactory();
-            lifeStateGeneratorService = new LifeStateGeneratorService();
         }
 
         [TestMethod]
         public void PostInitialGenerationReturnsOkResultsOnSuccess()
         {
-            var initialGenerationsSinceAliveGrid = new Int32[2, 2];
-            initialGenerationsSinceAliveGrid[0, 0] = 0;
-            initialGenerationsSinceAliveGrid[0, 1] = 0;
-            initialGenerationsSinceAliveGrid[1, 0] = 0;
-            initialGenerationsSinceAliveGrid[1, 1] = 0;
+            var encodedGenerationInput = new Int32[2, 2];
+            encodedGenerationInput[0, 0] = 0;
+            encodedGenerationInput[0, 1] = 0;
+            encodedGenerationInput[1, 0] = 0;
+            encodedGenerationInput[1, 1] = 0;
 
-            var result = controller.PostInitialGeneration(initialGenerationsSinceAliveGrid) as OkNegotiatedContentResult<Int32>;
+            var cellGrid = new Cell[2, 2];
+            cellGrid[0, 0] = new Cell(new AliveLifeState());
+            cellGrid[0, 1] = new Cell(new AliveLifeState());
+            cellGrid[1, 0] = new Cell(new AliveLifeState());
+            cellGrid[1, 1] = new Cell(new AliveLifeState());
+
+            var decodedGenerationToPost = new Generation(cellGrid);
+
+            mockGenerationEncoderService.Setup(e => e.Decode(encodedGenerationInput)).Returns(decodedGenerationToPost);
+
+            var result = controller.PostInitialGeneration(encodedGenerationInput) as OkNegotiatedContentResult<Int32>;
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<Int32>));
+
+            mockGenerationEncoderService.Verify(e => e.Decode(encodedGenerationInput), Times.Once);
+            mockGenerationEncoderService.Verify(e => e.Decode(It.IsAny<Int32[,]>()), Times.Once);
         }
 
         [TestMethod]
         public void PostInitialGenerationUpdatesStoredCurrentGeneration()
         {
-            var initialGenerationsSinceAliveGrid = new Int32[2, 2];
-            initialGenerationsSinceAliveGrid[0, 0] = 0;
-            initialGenerationsSinceAliveGrid[0, 1] = -1;
-            initialGenerationsSinceAliveGrid[1, 0] = 0;
-            initialGenerationsSinceAliveGrid[1, 1] = -1;
+            var encodedGenerationInput = new Int32[2, 2];
+            encodedGenerationInput[0, 0] = 0;
+            encodedGenerationInput[0, 1] = 0;
+            encodedGenerationInput[1, 0] = 0;
+            encodedGenerationInput[1, 1] = 0;
 
-            controller.PostInitialGeneration(initialGenerationsSinceAliveGrid);
+            var cellGrid = new Cell[2, 2];
+            cellGrid[0, 0] = new Cell(new AliveLifeState());
+            cellGrid[0, 1] = new Cell(new AliveLifeState());
+            cellGrid[1, 0] = new Cell(new AliveLifeState());
+            cellGrid[1, 1] = new Cell(new AliveLifeState());
 
-            var updatedStoredCellGrid = GameOfLifeData.CurrentGeneration.Cells;
+            var decodedGenerationToPost = new Generation(cellGrid);
 
-            Assert.AreEqual(new Cell(lifeStateGeneratorService.Generate(0)).LifeState.GenerationsSinceAlive, updatedStoredCellGrid[0, 0].LifeState.GenerationsSinceAlive);
-            Assert.AreEqual(new Cell(lifeStateGeneratorService.Generate(- 1)).LifeState.GenerationsSinceAlive, updatedStoredCellGrid[0, 1].LifeState.GenerationsSinceAlive);
-            Assert.AreEqual(new Cell(lifeStateGeneratorService.Generate(0)).LifeState.GenerationsSinceAlive, updatedStoredCellGrid[1, 0].LifeState.GenerationsSinceAlive);
-            Assert.AreEqual(new Cell(lifeStateGeneratorService.Generate(- 1)).LifeState.GenerationsSinceAlive, updatedStoredCellGrid[1, 1].LifeState.GenerationsSinceAlive);
+            mockGenerationEncoderService.Setup(e => e.Decode(encodedGenerationInput)).Returns(decodedGenerationToPost);
+
+            controller.PostInitialGeneration(encodedGenerationInput);
+
+            Assert.IsInstanceOfType(GameOfLifeData.CurrentGeneration.Cells[0, 0].LifeState, typeof(AliveLifeState));
+            Assert.IsInstanceOfType(GameOfLifeData.CurrentGeneration.Cells[0, 1].LifeState, typeof(AliveLifeState));
+            Assert.IsInstanceOfType(GameOfLifeData.CurrentGeneration.Cells[1, 0].LifeState, typeof(AliveLifeState));
+            Assert.IsInstanceOfType(GameOfLifeData.CurrentGeneration.Cells[1, 1].LifeState, typeof(AliveLifeState));
+
+            mockGenerationEncoderService.Verify(e => e.Decode(encodedGenerationInput), Times.Once);
+            mockGenerationEncoderService.Verify(e => e.Decode(It.IsAny<Int32[,]>()), Times.Once);
         }
 
         [TestMethod]
@@ -73,11 +92,21 @@ namespace GameOfLifeKataTests.Controllers
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
         }
 
+        private Generation CreateInitialGeneration()
+        {
+            var cellGrid = new Cell[2, 2];
+            cellGrid[0, 0] = new Cell(new NeverAliveLifeState());
+            cellGrid[0, 1] = new Cell(new AliveLifeState());
+            cellGrid[1, 0] = new Cell(new AliveLifeState());
+            cellGrid[1, 1] = new Cell(new AliveLifeState());
+
+            return new Generation(cellGrid);
+        }
+
         [TestMethod]
         public void GetNextGenerationReturnsOkResultsOnSuccess()
         {
-            var locationsToPopulate = new[] { new Coordinate(0, 0), new Coordinate(1, 0) };
-            GameOfLifeData.CurrentGeneration = new Generation(cellGridFactory.CreateCellGrid(locationsToPopulate, 2, 2));
+            CreateInitialGeneration();
 
             var result = controller.GetNextGeneration() as OkNegotiatedContentResult<Int32>;
 
@@ -85,44 +114,72 @@ namespace GameOfLifeKataTests.Controllers
         }
 
         [TestMethod]
-        public void GetNextGenerationReturnsContentOnSuccess()
+        public void GetNextGenerationReturnsEncodedGenerationOnSuccess()
         {
-            var locationsToPopulate = new[] { new Coordinate(0, 0), new Coordinate(1, 0) };
-            var currentGeneration = new Generation(cellGridFactory.CreateCellGrid(locationsToPopulate, 2, 2));
-            GameOfLifeData.CurrentGeneration = currentGeneration;
-            var generationToReturn = new Generation(cellGridFactory.CreateCellGrid(new Coordinate[0], 2, 2));
+            var initialGeneration = CreateInitialGeneration();
+            GameOfLifeData.CurrentGeneration = initialGeneration;
 
-            mockGameOfLife.Setup(g => g.GetNextGeneration(currentGeneration)).Returns(generationToReturn);
+            var cellGrid = new Cell[2, 2];
+            cellGrid[0, 0] = new Cell(new AliveLifeState());
+            cellGrid[0, 1] = new Cell(new DeadLifeState());
+            cellGrid[1, 0] = new Cell(new DeadLifeState());
+            cellGrid[1, 1] = new Cell(new DeadLifeState());
+
+            var generationToReturn = new Generation(cellGrid);
+
+            mockGameOfLife.Setup(g => g.GetNextGeneration(initialGeneration)).Returns(generationToReturn);
+
+            var encodedCellsToReturn = new Int32[2, 2];
+            encodedCellsToReturn[0, 0] = 0;
+            encodedCellsToReturn[0, 1] = 1;
+            encodedCellsToReturn[1, 0] = 1;
+            encodedCellsToReturn[1, 1] = 1;
+
+            mockGenerationEncoderService.Setup(e => e.Encode(generationToReturn)).Returns(encodedCellsToReturn);
 
             var result = controller.GetNextGeneration() as OkNegotiatedContentResult<Int32[,]>;
 
-            mockGameOfLife.Verify(g => g.GetNextGeneration(currentGeneration), Times.Once);
+            mockGameOfLife.Verify(g => g.GetNextGeneration(initialGeneration), Times.Once);
             mockGameOfLife.Verify(g => g.GetNextGeneration(It.IsAny<Generation>()), Times.Once);
 
+            mockGenerationEncoderService.Verify(g => g.Encode(generationToReturn), Times.Once);
+            mockGenerationEncoderService.Verify(g => g.Encode(It.IsAny<Generation>()), Times.Once);
+
             Assert.IsNotNull(result.Content);
+
+            var returnedEncodedCells = result.Content as Int32[,];
+            Assert.AreEqual(0, returnedEncodedCells[0, 0]);
+            Assert.AreEqual(1, returnedEncodedCells[0, 1]);
+            Assert.AreEqual(1, returnedEncodedCells[1, 0]);
+            Assert.AreEqual(1, returnedEncodedCells[1, 1]);
+
         }
 
         [TestMethod]
         public void GetNextGenerationUpdatesStoredCurrentGeneration()
         {
-            var locationsToPopulate = new[] { new Coordinate(0, 0), new Coordinate(1, 0) };
-            var currentGeneration = new Generation(cellGridFactory.CreateCellGrid(locationsToPopulate, 2, 2));
-            GameOfLifeData.CurrentGeneration = currentGeneration;
-            var generationToReturn = new Generation(cellGridFactory.CreateCellGrid(new Coordinate[0], 2, 2));
+            var initialGeneration = CreateInitialGeneration();
+            GameOfLifeData.CurrentGeneration = initialGeneration;
 
-            mockGameOfLife.Setup(g => g.GetNextGeneration(currentGeneration)).Returns(generationToReturn);
+            var cellGrid = new Cell[2, 2];
+            cellGrid[0, 0] = new Cell(new AliveLifeState());
+            cellGrid[0, 1] = new Cell(new DeadLifeState());
+            cellGrid[1, 0] = new Cell(new DeadLifeState());
+            cellGrid[1, 1] = new Cell(new DeadLifeState());
 
-            var result = controller.GetNextGeneration() as OkNegotiatedContentResult<Int32[,]>;
-            var resultCellGrid = GameOfLifeData.CurrentGeneration.Cells;
+            var generationToReturn = new Generation(cellGrid);
 
-            mockGameOfLife.Verify(g => g.GetNextGeneration(currentGeneration), Times.Once);
+            mockGameOfLife.Setup(g => g.GetNextGeneration(initialGeneration)).Returns(generationToReturn);
+
+            controller.GetNextGeneration();
+            
+            mockGameOfLife.Verify(g => g.GetNextGeneration(initialGeneration), Times.Once);
             mockGameOfLife.Verify(g => g.GetNextGeneration(It.IsAny<Generation>()), Times.Once);
 
-
-            Assert.AreEqual(new NeverAliveLifeState().GenerationsSinceAlive, resultCellGrid[0, 0]);
-            Assert.AreEqual(new NeverAliveLifeState().GenerationsSinceAlive, resultCellGrid[0, 1]);
-            Assert.AreEqual(new NeverAliveLifeState().GenerationsSinceAlive, resultCellGrid[1, 0]);
-            Assert.AreEqual(new NeverAliveLifeState().GenerationsSinceAlive, resultCellGrid[1, 1]);
+            Assert.IsInstanceOfType(GameOfLifeData.CurrentGeneration.Cells[0, 0].LifeState, typeof(AliveLifeState));
+            Assert.IsInstanceOfType(GameOfLifeData.CurrentGeneration.Cells[0, 1].LifeState, typeof(DeadLifeState));
+            Assert.IsInstanceOfType(GameOfLifeData.CurrentGeneration.Cells[1, 0].LifeState, typeof(DeadLifeState));
+            Assert.IsInstanceOfType(GameOfLifeData.CurrentGeneration.Cells[1, 1].LifeState, typeof(DeadLifeState));
         }
     }
 }

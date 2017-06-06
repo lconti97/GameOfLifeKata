@@ -75,20 +75,6 @@ namespace GameOfLifeKataTests
         }
 
         [TestMethod]
-        public void GetNextGenerationWithNeverAliveCellReturnsCellWithNegativeOneGenerationsSinceAlive()
-        {
-            var locationsToPopulate = new Coordinate[0];
-            AssertCellWithNAliveNeighborsWillHaveGenerationsSinceAlive(locationsToPopulate, 0, -1);
-        }
-
-        [TestMethod]
-        public void GetNextGenerationWithAliveCellThatSurvivesReturnsCellWithZeroGenerationsSinceAlive()
-        {
-            var locationsToPopulate = new[] { new Coordinate(1, 1), new Coordinate(0, 0), new Coordinate(2, 2) };
-            AssertCellWithNAliveNeighborsWillHaveGenerationsSinceAlive(locationsToPopulate, 2, 0);
-        }
-
-        [TestMethod]
         public void GetNextGenerationWithAliveCellThatDiesReturnsCellWithOneGenerationsSinceAlive()
         {
             var locationsToPopulate = new[] { new Coordinate(1, 1), new Coordinate(2, 2) };
@@ -108,7 +94,7 @@ namespace GameOfLifeKataTests
 
             var nextGeneration = gameOfLife.GetNextGeneration(currentGeneration);
 
-            Assert.AreEqual(2, nextGeneration.Cells[1, 1].LifeState.GenerationsSinceAlive);
+            Assert.AreEqual(2, (nextGeneration.Cells[1, 1].LifeState as DeadLifeState).GenerationsSinceAlive);
             mockCellNeighborService.Verify(s => s.GetAliveNeighborsCount(cellGrid, 1, 1), Times.Once);
             mockCellNeighborService.Verify(s => s.GetAliveNeighborsCount(It.IsAny<Cell[,]>(), It.IsAny<Int32>(), It.IsAny<Int32>()), Times.Exactly(9));
         }
@@ -166,7 +152,7 @@ namespace GameOfLifeKataTests
 
             var nextGeneration = gameOfLife.GetNextGeneration(currentGeneration);
 
-            Assert.AreEqual(generationsSinceAlive, nextGeneration.Cells[1, 1].LifeState.GenerationsSinceAlive);
+            Assert.AreEqual(generationsSinceAlive, (nextGeneration.Cells[1, 1].LifeState as DeadLifeState).GenerationsSinceAlive);
             mockCellNeighborService.Verify(s => s.GetAliveNeighborsCount(cellGrid, 1, 1), Times.Once);
             mockCellNeighborService.Verify(s => s.GetAliveNeighborsCount(It.IsAny<Cell[,]>(), It.IsAny<Int32>(), It.IsAny<Int32>()), Times.Exactly(9));
         }

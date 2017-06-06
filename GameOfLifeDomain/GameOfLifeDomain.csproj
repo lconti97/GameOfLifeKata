@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameOfLifeData.cs" />
-    <Compile Include="Services\GenerationConverterService.cs" />
+    <Compile Include="Services\GenerationEncoderService.cs" />
     <Compile Include="Models\LifeStates\AliveLifeState.cs" />
     <Compile Include="Models\LifeStates\DeadLifeState.cs" />
     <Compile Include="Models\LifeStates\ILifeState.cs" />
@@ -49,13 +49,11 @@
     <Compile Include="IGameOfLife.cs" />
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Models\Generation.cs" />
-    <Compile Include="Services\ILifeStateGeneratorService.cs" />
-    <Compile Include="Services\LifeStateGeneratorService.cs" />
     <Compile Include="Models\LifeStates\NeverAliveLifeState.cs" />
     <Compile Include="Services\CellNeighborService.cs" />
     <Compile Include="Services\ICellNeighborService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IGenerationConverterService.cs" />
+    <Compile Include="Services\IGenerationEncoderService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

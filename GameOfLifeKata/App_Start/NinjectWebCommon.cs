@@ -49,7 +49,7 @@ namespace NinjectBootstrap.App_Start
         {
             kernel.Bind<IGameOfLife>().To<GameOfLife>();
             kernel.Bind<ICellNeighborService>().To<CellNeighborService>();
-            kernel.Bind<IGenerationConverterService>().To<GenerationConverterService>();
+            kernel.Bind<IGenerationEncoderService>().To<GenerationEncoderService>();
         }        
     }
 }
