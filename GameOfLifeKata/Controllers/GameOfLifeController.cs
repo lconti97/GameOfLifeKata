@@ -17,7 +17,7 @@ namespace GameOfLifeKata.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult PostInitialGeneration(Int32[,] encodedInitialGeneration)
+        public IHttpActionResult PostInitialGeneration(Int32[][] encodedInitialGeneration)
         {
             try
             {

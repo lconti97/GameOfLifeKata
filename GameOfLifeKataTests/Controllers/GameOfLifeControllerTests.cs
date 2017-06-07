@@ -30,11 +30,14 @@ namespace GameOfLifeKataTests.Controllers
         [TestMethod]
         public void PostInitialGenerationReturnsOkResultsOnSuccess()
         {
-            var encodedGenerationInput = new Int32[2, 2];
-            encodedGenerationInput[0, 0] = 0;
-            encodedGenerationInput[0, 1] = 0;
-            encodedGenerationInput[1, 0] = 0;
-            encodedGenerationInput[1, 1] = 0;
+            var encodedGenerationInput = new Int32[2][];
+            encodedGenerationInput[0] = new Int32[2];
+            encodedGenerationInput[1] = new Int32[2];
+
+            encodedGenerationInput[0][0] = 0;
+            encodedGenerationInput[0][1] = 0;
+            encodedGenerationInput[1][0] = 0;
+            encodedGenerationInput[1][1] = 0;
 
             var cellGrid = new Cell[2, 2];
             cellGrid[0, 0] = new Cell(new AliveLifeState());
@@ -51,17 +54,20 @@ namespace GameOfLifeKataTests.Controllers
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<Int32>));
 
             mockGenerationEncoderService.Verify(e => e.Decode(encodedGenerationInput), Times.Once);
-            mockGenerationEncoderService.Verify(e => e.Decode(It.IsAny<Int32[,]>()), Times.Once);
+            mockGenerationEncoderService.Verify(e => e.Decode(It.IsAny<Int32[][]>()), Times.Once);
         }
 
         [TestMethod]
         public void PostInitialGenerationUpdatesStoredCurrentGeneration()
         {
-            var encodedGenerationInput = new Int32[2, 2];
-            encodedGenerationInput[0, 0] = 0;
-            encodedGenerationInput[0, 1] = 0;
-            encodedGenerationInput[1, 0] = 0;
-            encodedGenerationInput[1, 1] = 0;
+            var encodedGenerationInput = new Int32[2][];
+            encodedGenerationInput[0] = new Int32[2];
+            encodedGenerationInput[1] = new Int32[2];
+
+            encodedGenerationInput[0][0] = 0;
+            encodedGenerationInput[0][1] = 0;
+            encodedGenerationInput[1][0] = 0;
+            encodedGenerationInput[1][1] = 0;
 
             var cellGrid = new Cell[2, 2];
             cellGrid[0, 0] = new Cell(new AliveLifeState());
@@ -81,7 +87,7 @@ namespace GameOfLifeKataTests.Controllers
             Assert.IsInstanceOfType(GameOfLifeData.CurrentGeneration.Cells[1, 1].LifeState, typeof(AliveLifeState));
 
             mockGenerationEncoderService.Verify(e => e.Decode(encodedGenerationInput), Times.Once);
-            mockGenerationEncoderService.Verify(e => e.Decode(It.IsAny<Int32[,]>()), Times.Once);
+            mockGenerationEncoderService.Verify(e => e.Decode(It.IsAny<Int32[][]>()), Times.Once);
         }
 
         [TestMethod]
@@ -181,5 +187,40 @@ namespace GameOfLifeKataTests.Controllers
             Assert.IsInstanceOfType(GameOfLifeData.CurrentGeneration.Cells[1, 0].LifeState, typeof(DeadLifeState));
             Assert.IsInstanceOfType(GameOfLifeData.CurrentGeneration.Cells[1, 1].LifeState, typeof(DeadLifeState));
         }
+
+        [TestMethod]
+        public void MyTestMethod()
+        {
+            var controller = new GameOfLifeController(new GameOfLife(new CellNeighborService()), new GenerationEncoderService());
+
+            var inputGrid = new Int32[10][];
+            for (int i = 0; i < inputGrid.Length; i++)
+            {
+                inputGrid[i] = new Int32[10];
+                for (int j = 0; j < inputGrid[0].Length; j++)
+                {
+                    inputGrid[i][j] = -1;
+                }
+            }
+
+            inputGrid[1][0] = 0;
+            inputGrid[1][1] = 0;
+            inputGrid[1][2] = 0;
+
+            controller.PostInitialGeneration(inputGrid);
+            var nextGen = (controller.GetNextGeneration() as OkNegotiatedContentResult<Int32[,]>).Content;
+
+            Assert.AreEqual(-1, nextGen[0, 0]);
+            Assert.AreEqual(0, nextGen[0, 1]);
+            Assert.AreEqual(-1, nextGen[0, 2]);
+            Assert.AreEqual(1, nextGen[1, 0]);
+            Assert.AreEqual(0, nextGen[1, 1]);
+            Assert.AreEqual(1, nextGen[1, 2]);
+            Assert.AreEqual(-1, nextGen[2, 0]);
+            Assert.AreEqual(0, nextGen[2, 1]);
+            Assert.AreEqual(-1, nextGen[2, 2]);
+        }
     }
+
+    
 }

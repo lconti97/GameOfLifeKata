@@ -6,13 +6,14 @@
 
     @for (var row = 0; row < 10; row++)
     {
-        <div class="row">
+        <div class="row" id="row-@row">
             @for (var column = 0; column < 10; column++)
             {
-                <div class="cell"></div>
+                <div class="cell" id="cell-@row-@column"></div>
             }
         </div>
     }
 
 </div>
-<p><a href="https://asp.net" class="btn btn-primary btn-lg">DO STUFF &raquo;</a></p>
+
+<p><a class="btn btn-primary btn-lg" id="do-stuff">STEP &raquo;</a></p>

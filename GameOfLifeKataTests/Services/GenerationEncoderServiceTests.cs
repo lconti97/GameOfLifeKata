@@ -23,12 +23,14 @@ namespace GameOfLifeKataTests.Services
         [TestMethod]
         public void DecodeOnGridOfNeverAliveCodesReturnsGenerationOfNeverAliveCells()
         {
-            var encodedGrid = new Int32[2, 2];
+            var encodedGrid = new Int32[2][];
+            encodedGrid[0] = new Int32[2];
+            encodedGrid[1] = new Int32[2];
 
-            encodedGrid[0, 0] = NeverAliveCode;
-            encodedGrid[0, 1] = NeverAliveCode;
-            encodedGrid[1, 0] = NeverAliveCode;
-            encodedGrid[1, 1] = NeverAliveCode;
+            encodedGrid[0][0] = NeverAliveCode;
+            encodedGrid[0][1] = NeverAliveCode;
+            encodedGrid[1][0] = NeverAliveCode;
+            encodedGrid[1][1] = NeverAliveCode;
 
             var decodedGeneration = generationConverter.Decode(encodedGrid);
 
@@ -43,12 +45,14 @@ namespace GameOfLifeKataTests.Services
         [TestMethod]
         public void DecodeOnGridOfAliveCodesReturnsGenerationOfAliveCells()
         {
-            var encodedGrid = new Int32[2, 2];
+            var encodedGrid = new Int32[2][];
+            encodedGrid[0] = new Int32[2];
+            encodedGrid[1] = new Int32[2];
 
-            encodedGrid[0, 0] = AliveCode;
-            encodedGrid[0, 1] = AliveCode;
-            encodedGrid[1, 0] = AliveCode;
-            encodedGrid[1, 1] = AliveCode;
+            encodedGrid[0][0] = AliveCode;
+            encodedGrid[0][1] = AliveCode;
+            encodedGrid[1][0] = AliveCode;
+            encodedGrid[1][1] = AliveCode;
 
             var decodedGeneration = generationConverter.Decode(encodedGrid);
 
@@ -62,12 +66,14 @@ namespace GameOfLifeKataTests.Services
         [TestMethod]
         public void DecodeOnGridOfOnesReturnsGenerationOfDeadCellsWithGenerationsSinceAliveOne()
         {
-            var encodedGrid = new Int32[2, 2];
+            var encodedGrid = new Int32[2][];
+            encodedGrid[0] = new Int32[2];
+            encodedGrid[1] = new Int32[2];
 
-            encodedGrid[0, 0] = 1;
-            encodedGrid[0, 1] = 1;
-            encodedGrid[1, 0] = 1;
-            encodedGrid[1, 1] = 1;
+            encodedGrid[0][0] = 1;
+            encodedGrid[0][1] = 1;
+            encodedGrid[1][0] = 1;
+            encodedGrid[1][1] = 1;
 
             var decodedGeneration = generationConverter.Decode(encodedGrid);
 
@@ -86,12 +92,14 @@ namespace GameOfLifeKataTests.Services
         [TestMethod]
         public void DecodeOnGridOfFoursReturnsGenerationOfDeadCellsWithGenerationsSinceAliveFour()
         {
-            var encodedGrid = new Int32[2, 2];
+            var encodedGrid = new Int32[2][];
+            encodedGrid[0] = new Int32[2];
+            encodedGrid[1] = new Int32[2];
 
-            encodedGrid[0, 0] = 4;
-            encodedGrid[0, 1] = 4;
-            encodedGrid[1, 0] = 4;
-            encodedGrid[1, 1] = 4;
+            encodedGrid[0][0] = 4;
+            encodedGrid[0][1] = 4;
+            encodedGrid[1][0] = 4;
+            encodedGrid[1][1] = 4;
 
             var decodedGeneration = generationConverter.Decode(encodedGrid);
 
@@ -110,12 +118,14 @@ namespace GameOfLifeKataTests.Services
         [TestMethod]
         public void DecodeOnGridWithMixedValuesReturnsGenerationOfCorrectCells()
         {
-            var encodedGrid = new Int32[2, 2];
+            var encodedGrid = new Int32[2][];
+            encodedGrid[0] = new Int32[2];
+            encodedGrid[1] = new Int32[2];
 
-            encodedGrid[0, 0] = NeverAliveCode;
-            encodedGrid[0, 1] = AliveCode;
-            encodedGrid[1, 0] = 1;
-            encodedGrid[1, 1] = 4;
+            encodedGrid[0][0] = NeverAliveCode;
+            encodedGrid[0][1] = AliveCode;
+            encodedGrid[1][0] = 1;
+            encodedGrid[1][1] = 4;
 
             var decodedGeneration = generationConverter.Decode(encodedGrid);
 

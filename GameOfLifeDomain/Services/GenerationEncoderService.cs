@@ -9,18 +9,15 @@ namespace GameOfLifeDomain.Services
         public const Int32 NeverAliveCode = -1;
         public const Int32 AliveCode = 0;
 
-        public Generation Decode(Int32[,] grid)
+        public Generation Decode(Int32[][] grid)
         {
-            var rows = grid.GetLength(0);
-            var columns = grid.GetLength(1);
+            var cellGrid = new Cell[grid.Length, grid[0].Length];
 
-            var cellGrid = new Cell[rows, columns];
-
-            for (var row = 0; row < rows; row++)
+            for (var row = 0; row < grid.Length; row++)
             {
-                for (var column = 0; column < columns; column++)
+                for (var column = 0; column < grid[row].Length; column++)
                 {
-                    var lifeState = DecodeLifeState(grid[row, column]);
+                    var lifeState = DecodeLifeState(grid[row][column]);
                     cellGrid[row, column] = new Cell(lifeState);
                 }
             }

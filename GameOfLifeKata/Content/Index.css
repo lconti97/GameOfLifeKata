@@ -1,5 +1,5 @@
 ﻿#grid {
-    border: solid 2px black;
+    border: solid 0px black;
     height: 800px;
     margin: 0 auto;
     width: 800px;
@@ -22,4 +22,20 @@
     padding: 0;
     flex: 1 0 auto;
     width: 80px;
+}
+
+.alive-cell {
+    background-color: greenyellow;
+}
+
+.dead-cell {
+    background-color: brown;
+}
+
+.never-alive-cell {
+    background-color: grey;
+}
+
+.btn {
+    margin: 0 auto;
 }

@@ -5,7 +5,7 @@ namespace GameOfLifeDomain.Services
 {
     public interface IGenerationEncoderService
     {
-        Generation Decode(Int32[,] generationsSinceAliveGrid);
+        Generation Decode(Int32[][] generationsSinceAliveGrid);
         Int32[,] Encode(Generation generation);
     }
 }

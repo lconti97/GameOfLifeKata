@@ -28,9 +28,10 @@ namespace GameOfLifeDomain
                     var cell = currentGeneration.Cells[row, column];
 
                     var aliveNeighborsCount = cellNeighborService.GetAliveNeighborsCount(currentGeneration.Cells, row, column);
-                    UpdateCell(cell, CellWillBeAlive(cell, aliveNeighborsCount));
+                    var cellWillBeAlive = CellWillBeAlive(cell, aliveNeighborsCount);
+                    var nextLifeState = GetNextLifeState(cell.LifeState, cellWillBeAlive);
 
-                    nextGenerationCells[row, column] = currentGeneration.Cells[row, column];
+                    nextGenerationCells[row, column] = new Cell(nextLifeState);
                 }
             }
 
@@ -45,20 +46,21 @@ namespace GameOfLifeDomain
             return cellIsAliveAndSurvives || cellIsNotAliveAndWillBePopulated;
         }
 
-        private void UpdateCell(Cell cell, Boolean willBeAlive)
+        private ILifeState GetNextLifeState(ILifeState lifeState, Boolean willBeAlive)
         {
-            if (cell.LifeState is NeverAliveLifeState && willBeAlive) {
-                cell.LifeState = new AliveLifeState();
+            if (lifeState is NeverAliveLifeState && willBeAlive) {
+                return new AliveLifeState();
             }
-            else if (cell.LifeState is AliveLifeState && !willBeAlive) {
-                cell.LifeState = new DeadLifeState();
+            else if (lifeState is AliveLifeState && !willBeAlive) {
+                return new DeadLifeState();
             }
-            else if (cell.LifeState is DeadLifeState) {
+            else if (lifeState is DeadLifeState) {
                 if (willBeAlive)
-                    cell.LifeState = new AliveLifeState();
+                    return new AliveLifeState();
                 else 
-                    (cell.LifeState as DeadLifeState).GenerationsSinceAlive++;
+                    (lifeState as DeadLifeState).GenerationsSinceAlive++;
             }
+            return lifeState;
         }
     }
 }
