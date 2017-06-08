@@ -29,13 +29,13 @@
 }
 
 .dead-cell {
-    background-color: brown;
+    background-color: saddlebrown;
 }
 
 .never-alive-cell {
     background-color: grey;
 }
 
-.btn {
+.btn-lg {
     margin: 0 auto;
 }
